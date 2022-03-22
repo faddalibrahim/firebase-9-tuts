@@ -10,6 +10,8 @@ import {
   onSnapshot,
   query,
   where,
+  orderBy,
+  serverTimestamp,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -42,7 +44,16 @@ const colRef = collection(db, "books");
 
 // queries
 
-const q = query(colRef, where("author", "==", "Isayama"));
+// const q = query(colRef, where("author", "==", "Isayama"));
+
+// orderBy this needs an index to work
+// const q = query(
+//   colRef,
+//   where("author", "==", "Isayama"),
+//   orderBy("title", "desc")
+//   );
+
+const q = query(colRef, orderBy("createdAt", "desc"));
 
 // real time collection data
 
@@ -65,6 +76,7 @@ addBookForm.addEventListener("submit", (e) => {
   addDoc(colRef, {
     title: addBookForm.title.value,
     author: addBookForm.author.value,
+    createdAt: serverTimestamp(),
   }).then(() => {
     addBookForm.reset();
     alert("book added successfully");
