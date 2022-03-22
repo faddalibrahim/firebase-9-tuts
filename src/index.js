@@ -4,8 +4,10 @@ import {
   getFirestore,
   collection,
   // getDocs,
+  getDoc,
   addDoc,
   deleteDoc,
+  updateDoc,
   doc,
   onSnapshot,
   query,
@@ -83,7 +85,7 @@ addBookForm.addEventListener("submit", (e) => {
   });
 });
 
-// adding docs
+// deleting docs
 const deleteBookForm = document.getElementById("delete");
 deleteBookForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -92,5 +94,31 @@ deleteBookForm.addEventListener("submit", (e) => {
   deleteDoc(docRef).then(() => {
     deleteBookForm.reset();
     alert("book deleted successfully");
+  });
+});
+
+// getting single doc
+
+const docRef = doc(db, "books", "bVYdIhE9eQ21DJf940eN");
+// getDoc(docRef).then((doc) => {
+//   console.log("getting single doc");
+//   console.log(doc.data(), doc.id);
+// });
+
+onSnapshot(docRef, (doc) => {
+  console.log(doc.data(), doc.id);
+});
+
+// updating docs
+
+const updateForm = document.getElementById("update");
+updateForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const docRef = doc(db, "books", updateForm.id.value);
+  updateDoc(docRef, {
+    title: "updated title",
+  }).then(() => {
+    updateForm.reset();
+    alert("updated successfully");
   });
 });
