@@ -3,10 +3,13 @@ import { initializeApp } from "firebase/app";
 import {
   getFirestore,
   collection,
-  getDocs,
+  // getDocs,
   addDoc,
   deleteDoc,
   doc,
+  onSnapshot,
+  query,
+  where,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -30,12 +33,28 @@ const db = getFirestore();
 const colRef = collection(db, "books");
 
 // get collection data
-getDocs(colRef)
-  .then((snapshot) => {
-    let books = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    console.log(books);
-  })
-  .catch((error) => alert("something went terribly wrong"));
+// getDocs(colRef)
+//   .then((snapshot) => {
+//     let books = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+//     console.log(books);
+//   })
+//   .catch((error) => alert("something went terribly wrong"));
+
+// queries
+
+const q = query(colRef, where("author", "==", "Isayama"));
+
+// real time collection data
+
+// onSnapshot(colRef, (snapshot) => {
+//   let books = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+//   console.log(books);
+// });
+
+onSnapshot(q, (snapshot) => {
+  let books = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  console.log(books);
+});
 
 /** CRUD */
 
